@@ -1,4 +1,4 @@
-package pt.rho.showmethemoney.api;
+package pt.rho.showmethemoney.config;
 
 import com.google.common.cache.CacheBuilder;
 import org.springframework.cache.Cache;
