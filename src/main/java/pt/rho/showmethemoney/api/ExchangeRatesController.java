@@ -1,5 +1,6 @@
 package pt.rho.showmethemoney.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,8 @@ import java.util.Map;
 @RequestMapping(value = "/showmethemoney", name = "Enjoy the currencies")
 public class ExchangeRatesController {
 
-    String apiBaseURL = "https://api.exchangeratesapi.io";
+    @Autowired
+    private ExchangeRatesServiceImpl exchangeRatesService;
 
     /**
      * Get exchange rate from Currency A to Currency B
@@ -26,8 +28,7 @@ public class ExchangeRatesController {
     @RequestMapping(value = "/{exchangeA}/{exchangeB}", method = RequestMethod.GET)
     @GetMapping("/{exchangeA}/{exchangeB}")
     public Double getExchangeRateFromAtoB(@PathVariable("exchangeA") String exchangeA, @PathVariable("exchangeB") String exchangeB) {
-        RestTemplate restTemplate = new RestTemplate();
-        ExchangeRates er = restTemplate.getForObject(apiBaseURL + "/latest?base=" + exchangeA, ExchangeRates.class);
+        ExchangeRates er = exchangeRatesService.getExchangeRates(exchangeA);
         Double rateB = er.getRates().get(exchangeB);
         return rateB;
     }
@@ -42,7 +43,7 @@ public class ExchangeRatesController {
     @GetMapping("/{exchange}")
     public Map getExchangeRatesForCurrency(@PathVariable("exchange") String exchange) {
         RestTemplate restTemplate = new RestTemplate();
-        ExchangeRates er = restTemplate.getForObject(apiBaseURL + "/latest?base=" + exchange, ExchangeRates.class);
+        ExchangeRates er = exchangeRatesService.getExchangeRates(exchange);
         // remove the searched currency
         er.getRates().remove(exchange);
         return er.getRates();
@@ -61,7 +62,7 @@ public class ExchangeRatesController {
     @GetMapping("/{exchangeA}/conversion/{exchanges}")
     public Map getConversionRateFromAtoB(@PathVariable("exchangeA") String exchangeA, @PathVariable("exchanges") String exchanges) {
         RestTemplate restTemplate = new RestTemplate();
-        ExchangeRates er = restTemplate.getForObject(apiBaseURL + "/latest?base=" + exchangeA, ExchangeRates.class);
+        ExchangeRates er = exchangeRatesService.getExchangeRates(exchangeA);
 
         String[] listOfCurrencies = exchanges.split(",");
 
