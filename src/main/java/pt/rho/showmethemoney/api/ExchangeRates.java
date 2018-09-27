@@ -4,9 +4,18 @@ import java.util.HashMap;
 
 public class ExchangeRates {
 
+    Double value;
     String base;
     String date;
     HashMap<String, Double> rates;
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
 
     public String getBase() {
         return base;
