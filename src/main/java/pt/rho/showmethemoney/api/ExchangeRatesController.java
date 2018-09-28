@@ -26,7 +26,7 @@ public class ExchangeRatesController {
     @RequestMapping(value = "/{exchangeA}/{exchangeB}", method = RequestMethod.GET)
     public Double getExchangeRateFromAtoB(@PathVariable("exchangeA") String exchangeA, @PathVariable("exchangeB") String exchangeB) {
         ExchangeRates er = exchangeRatesService.getExchangeRates(exchangeA);
-        Double rateB = er.getRates().get(exchangeB);
+        Double rateB = er.getRates().get(exchangeB.toUpperCase());
         return rateB;
     }
 
@@ -40,7 +40,7 @@ public class ExchangeRatesController {
     public Map getExchangeRatesForCurrency(@PathVariable("exchange") String exchange) {
         ExchangeRates er = exchangeRatesService.getExchangeRates(exchange);
         // remove the searched currency
-        er.getRates().remove(exchange);
+        er.getRates().remove(exchange.toUpperCase());
         return er.getRates();
     }
 
